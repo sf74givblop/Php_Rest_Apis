@@ -1,11 +1,17 @@
 <?php
 	/* File : Rest.inc.php
-	 * Author : Arun Kumar Sekar
+	 * Author : Serge Frézier based on the original example of Arun Kumar Sekar
+         * Among other modif, I adapted my original crud_pdo.php file
 	*/
 	class REST {
 		
 		public $_allow = array();
-		public $_content_type = "application/json";
+                /*
+                 * I change the line below as I want a correct display, not only text
+                 */
+		//public $_content_type = "application/json";
+                public $_content_type = "text/html;charset=utf-8";
+                
 		public $_request = array();
 		
 		private $_method = "";		
@@ -25,7 +31,7 @@
 			echo $data;
 			exit;
 		}
-		
+                 
 		private function get_status_message(){
 			$status = array(
 						100 => 'Continue',  
@@ -115,4 +121,56 @@
 			header("HTTP/1.1 ".$this->_code." ".$this->get_status_message());
 			header("Content-Type:".$this->_content_type);
 		}
-	}	
+	}
+        
+        //I added those classes in order to use them as handlers. I amy or may not use them for the PDO CRUDs
+        class Dbname{
+            var $dbName;    //that var is only used in that class
+            public function _setDbName($new_dbName){
+                $this->dbname=$new_dbName;
+            }
+            public function getDbName(){        
+                return $this->dbname;    
+            }    
+        }
+
+        class NumRes{
+            var $numResults;    //that var is only used in that class       
+            public function _setNumResults($new_numResults){
+                $this->numResults=$new_numResults;
+            }        
+            public function getNumResults(){
+                return $this->numResults;    
+            }     
+        }
+
+        class Res{
+            var $result;   //that var is only used in that class 
+            public function _setResult($new_result){
+                $this->result=$new_result;
+            }
+            public function getResult(){
+                return $this->result;    
+            }   
+        }
+
+/*
+        class TableRows extends RecursiveIteratorIterator { 
+            function __construct($it) { 
+                parent::__construct($it, self::LEAVES_ONLY); 
+            }
+
+            function current() {
+                return "<td>" . parent::current(). "</td>";
+            }
+
+            function beginChildren() { 
+                echo "<tr>"; 
+            } 
+
+            function endChildren() { 
+                echo "</tr>" . "\n";
+            } 
+        } 
+ 
+ */
